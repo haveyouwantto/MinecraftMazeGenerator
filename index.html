@@ -28,28 +28,32 @@
       <div class="column is-3">
         <div class="box content">
           <strong>Width (in paths):</strong>
-          <input class="input" step="5" min="10" max="100" value="20" type="number" data-for="width">
+          <input class="input" step="1" min="2" max="100" value="20" type="number" data-for="width">
           <strong>Height (in paths):</strong>
-          <input class="input" step="5" min="10" max="100" value="20" type="number" data-for="height">
+          <input class="input" step="1" min="2" max="100" value="20" type="number" data-for="height">
           <strong>Dimensions (blocks):</strong>
           <span data-show="dimensions"></span>
         </div>
         <div class="box content">
           <strong>Wall width:</strong>
-          <input class="input" min="1" max="5" value="1" type="number" data-for="wallSize">
+          <input class="input" min="1" max="50" value="1" type="number" data-for="wallSize">
           <strong>Wall height:</strong>
           <input class="input" min="1" max="50" value="3" type="number" data-for="wallHeight">
           <strong>Path width:</strong>
-          <input class="input" min="1" max="5" value="1" type="number" data-for="walkSize">
+          <input class="input" min="1" max="50" value="1" type="number" data-for="walkSize">
           <strong>Wall block:</strong>
           <input class="input is-fullwidth" value="stone" data-for="block">
         </div>
         <div class="box">
-          <button class="button is-primary">Download function</button>
+          <button class="button is-primary">Generate function</button>
+        </div>
+        <div>
+          <textarea id="out" cols=50 rows=20></textarea>
         </div>
       </div>
     </div>
   </section>
+  
 </body>
 
 </html>

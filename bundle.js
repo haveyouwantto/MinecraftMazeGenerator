@@ -103,12 +103,16 @@ function generateCommand() {
     var commands = [
         "# Clear maze blocks\n"
     ];
+    commands.push("setblock ~-1 ~-1 ~-1 stone\n");
+    commands.push("scoreboard objectives add align dummy\n");
+    commands.push("summon armor_stand ~-1 ~ ~-1\n");
+    commands.push("scoreboard players add @e[type=armor_stand,r=2] align 1\n")
     var clearSize = Math.floor(Math.sqrt(32768 / (wallHeight + 1)));
     for (var y = 0; y < canvas.height; y += clearSize) {
         for (var x = 0; x < canvas.width; x += clearSize) {
             var xMax = Math.min(x + clearSize, canvas.width);
             var yMax = Math.min(y + clearSize, canvas.height);
-            commands.push("fill ~" + x + " ~ ~" + y + " ~" + (xMax - 1) + " ~" + wallHeight + " ~" + (yMax - 1) + " air\n");
+            commands.push("execute @e[type=armor_stand,scores={align=1}] ~1 ~ ~1 fill ~" + x + " ~ ~" + y + " ~" + (xMax - 1) + " ~" + wallHeight + " ~" + (yMax - 1) + " air\n");
         }
     }
     commands.push("# Fill maze blocks\n");
@@ -117,16 +121,18 @@ function generateCommand() {
             var data = context.getImageData(x, y, 1, 1).data;
             if (data[0])
                 continue;
-            commands.push("fill ~" + x + " ~ ~" + y + " ~" + x + " ~" + wallHeight + " ~" + y + " " + block + "\n");
+            commands.push("execute @e[type=armor_stand,scores={align=1}] ~1 ~ ~1 fill ~" + x + " ~ ~" + y + " ~" + x + " ~" + wallHeight + " ~" + y + " " + block + "\n");
         }
     }
-    var element = document.body.appendChild(document.createElement('a'));
+    commands.push("execute @e[type=armor_stand,scores={align=1}] ~ ~ ~ kill @s\n");
+    document.getElementById("out").innerHTML=commands.join("");
+    /*var element = document.body.appendChild(document.createElement('a'));
     var commandData = new Blob(commands, { type: 'text/plain' });
     element.href = URL.createObjectURL(commandData);
     element.setAttribute('download', 'maze.mcfunction');
     element.style.display = 'none';
     element.click();
-    document.body.removeChild(element);
+    document.body.removeChild(element);*/
 }
 var drawDelay = debounce(draw, 500);
 function validate() {
