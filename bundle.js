@@ -101,18 +101,17 @@ function generateCommand() {
     walkSize--;
     wallHeight--;
     var commands = [
-        "# Clear maze blocks\n"
+        "from mcpi import minecraft\n"
     ];
-    commands.push("setblock ~-1 ~-1 ~-1 stone\n");
-    commands.push("scoreboard objectives add align dummy\n");
-    commands.push("summon armor_stand ~-1 ~ ~-1\n");
-    commands.push("scoreboard players add @e[type=armor_stand,r=2] align 1\n")
+    commands.push("mc=minecraft.Minecraft.create()\n");
+    commands.push("x,y,z=mc.player.getPos()\n");
+    commands.push("# Clear maze blocks\n")
     var clearSize = Math.floor(Math.sqrt(32768 / (wallHeight + 1)));
     for (var y = 0; y < canvas.height; y += clearSize) {
         for (var x = 0; x < canvas.width; x += clearSize) {
             var xMax = Math.min(x + clearSize, canvas.width);
             var yMax = Math.min(y + clearSize, canvas.height);
-            commands.push("execute @e[type=armor_stand,scores={align=1}] ~1 ~ ~1 fill ~" + x + " ~ ~" + y + " ~" + (xMax - 1) + " ~" + wallHeight + " ~" + (yMax - 1) + " air\n");
+            commands.push("mc.setBlocks(x+" + x + ", y, z+ " + y + ", x+" + (xMax - 1) + " ,y+" + wallHeight + " ,z+" + (yMax - 1) + " ,0)\n");
         }
     }
     commands.push("# Fill maze blocks\n");
@@ -121,10 +120,9 @@ function generateCommand() {
             var data = context.getImageData(x, y, 1, 1).data;
             if (data[0])
                 continue;
-            commands.push("execute @e[type=armor_stand,scores={align=1}] ~1 ~ ~1 fill ~" + x + " ~ ~" + y + " ~" + x + " ~" + wallHeight + " ~" + y + " " + block + "\n");
+            commands.push("mc.setBlocks( x+" + x + " ,y,z+" + y + " ,x+" + x + " ,y+" + wallHeight + " ,z+" + y + " ," + block + ")\n");
         }
     }
-    commands.push("execute @e[type=armor_stand,scores={align=1}] ~ ~ ~ kill @s\n");
     document.getElementById("out").innerHTML=commands.join("");
     /*var element = document.body.appendChild(document.createElement('a'));
     var commandData = new Blob(commands, { type: 'text/plain' });
